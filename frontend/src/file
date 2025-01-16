@@ -1,0 +1,38 @@
+{
+  /* // const Navbar = () => {
+//   return (
+//     <AppBar position="fixed" style={{ backgroundColor: "#3f51b5" }}>
+//       <Toolbar>
+//         <IconButton edge="start" color="inherit" aria-label="menu">
+//           <MenuIcon />
+//         </IconButton>
+//         <Typography variant="h6" sx={{ flexGrow: 1 }}>
+//           PII Detection App
+//         </Typography>
+//         <Button color="inherit">Login</Button>
+//       </Toolbar>
+//     </AppBar>
+//   );
+// };
+
+*/
+}
+{
+  /* <footer className="footer">
+<Container position="fixed" style={{ backgroundColor: "#3f51b5" }}>
+  <Grid
+    container
+    justifyContent="center"
+    alignItems="center"
+    style={{ padding: "1rem 0" }}
+  >
+    <Grid item>
+      <Typography variant="body2" color="textSecondary" align="center">
+        &copy; {new Date().getFullYear()} Chaim & Yakov. All rights
+        reserved.
+      </Typography>
+    </Grid>
+  </Grid>
+</Container>
+</footer> */
+}
