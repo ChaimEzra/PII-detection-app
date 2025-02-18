@@ -1,5 +1,6 @@
 // import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../styles/Navbar.css";
 // import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
 // import MenuIcon from "@mui/icons-material/Menu"
 // import "frontend/public/web_icon.svg";

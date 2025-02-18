@@ -6,11 +6,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const Footer = () => {
   return (
     <>
-      <footer className="bg-dark text-white text-center text-lg-start ">
+      <footer className="bg-dark text-white text-center text-lg-start margin-top">
         <div className="container p-4">
           <section className="mb-4">
             <a
-              href="#"
+              href="https://www.youtube.com/"
               className="btn btn-outline-light btn-floating m-1"
               role="button"
             >
@@ -140,7 +140,7 @@ const Footer = () => {
         </div>
 
         <div className="text-center p-3 bg-secondary text-white">
-          © 2025 Company Name. All rights reserved.
+          © {new Date().getFullYear()} Company Name. All rights reserved Y&C.
         </div>
       </footer>
     </>
