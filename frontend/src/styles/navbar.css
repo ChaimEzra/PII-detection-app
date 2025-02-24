@@ -1,8 +1,12 @@
 .navbar {
   margin-bottom: 0;
   padding-bottom: 0;
-  background-color: rgb(228, 136, 17);
+  background-color: rgb(95, 94, 92);
 }
+.navbar-toggler-icon {
+  filter: invert(100%);
+}
+
 .container-fluid {
   padding-top: 0;
 }

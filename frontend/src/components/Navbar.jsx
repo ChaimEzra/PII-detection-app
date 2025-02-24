@@ -1,5 +1,6 @@
 // import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
 import "../styles/Navbar.css";
 // import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
 // import MenuIcon from "@mui/icons-material/Menu"
@@ -7,7 +8,8 @@ import "../styles/Navbar.css";
 function Navbar() {
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+      {/* <nav className="navbar navbar-expand-lg bg-body-tertiary"> */}
+      <nav className="navbar navbar-expand-lg bg-gray">
         <div className="container-fluid">
           <a className="navbar-brand" href="/home">
             <img
@@ -29,10 +31,8 @@ function Navbar() {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div
-            className="collapse navbar-collapse justify-content-center"
-            id="navbarNavAltMarkup"
-          >
+          {/* </button>  justify-content-center id="navbarNavAltMarkup" */}
+          <div className=" collapse navbar-collapse " id="navbarNavAltMarkup">
             <div className="navbar-nav">
               <a className="nav-link active" aria-current="page" href="/home">
                 Home

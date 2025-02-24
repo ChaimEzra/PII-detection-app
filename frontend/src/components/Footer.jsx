@@ -1,6 +1,4 @@
-// import React from "react";
-
-// import { Container, Grid, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Footer = () => {
@@ -45,7 +43,7 @@ const Footer = () => {
               <i className="fab fa-linkedin-in"></i>
             </a>
             <a
-              href="#"
+              href="https://github.com/ChaimEzra"
               className="btn btn-outline-light btn-floating m-1"
               role="button"
             >
@@ -59,19 +57,19 @@ const Footer = () => {
                 <h5 className="text-uppercase">Company</h5>
                 <ul className="list-unstyled mb-0">
                   <li>
-                    <a href="#" className="text-white">
+                    <Link to="about" className="text-white">
                       About
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-white">
+                    <Link to="careers" className="text-white">
                       Careers
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-white">
+                    <Link to="contact" className="text-white">
                       Contact
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -79,19 +77,19 @@ const Footer = () => {
                 <h5 className="text-uppercase">Products</h5>
                 <ul className="list-unstyled mb-0">
                   <li>
-                    <a href="#" className="text-white">
+                    <Link to="pricing" className="text-white">
                       Pricing
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-white">
+                    <Link to="features" className="text-white">
                       Features
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-white">
+                    <Link to="integrations" className="text-white">
                       Integrations
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -99,19 +97,19 @@ const Footer = () => {
                 <h5 className="text-uppercase">Support</h5>
                 <ul className="list-unstyled mb-0">
                   <li>
-                    <a href="#" className="text-white">
+                    <Link to="help-center" className="text-white">
                       Help Center
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-white">
+                    <Link to="FAQs" className="text-white">
                       FAQs
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-white">
+                    <Link to="community" className="text-white">
                       Community
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -119,19 +117,19 @@ const Footer = () => {
                 <h5 className="text-uppercase">Legal</h5>
                 <ul className="list-unstyled mb-0">
                   <li>
-                    <a href="#" className="text-white">
+                    <Link to="privecy-policy" className="text-white">
                       Privacy Policy
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-white">
+                    <Link to="terms-of-servis" className="text-white">
                       Terms of Service
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-white">
+                    <Link to="cookie-policy" className="text-white">
                       Cookie Policy
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>

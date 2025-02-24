@@ -1,64 +1,58 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useDropzone } from "react-dropzone";
 import "../styles/FileUp.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+// import Footer from "./Footer";
 
 function FileUp() {
   const [pdfFile, setPdfFile] = useState(null);
   const [folderFiles, setFolderFiles] = useState([]);
 
-  const handleFileChange = (event) => {
-    setPdfFile(event.target.files[0]);
-  };
-
-  const handleFolderChange = (event) => {
-    setFolderFiles(Array.from(event.target.files));
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("PDF file:", pdfFile);
     console.log("Folder files:", folderFiles);
+    window.alert("PDF file and folder files uploaded successfully!");
   };
 
-  useEffect(() => {
-    if (pdfFile) {
-      console.log("PDF file updated:", pdfFile);
-    }
-  }, [pdfFile]);
+  const handleDrop = (acceptedFiles) => {
+    const pdfs = acceptedFiles.filter(
+      (file) => file.type === "application/pdf"
+    );
+    const files = acceptedFiles.filter(
+      (file) => file.type !== "application/pdf"
+    );
 
-  useEffect(() => {
-    if (folderFiles.length > 0) {
-      console.log("Folder files updated:", folderFiles);
+    if (pdfs.length == 1) {
+      setPdfFile(pdfs[pdfs.length - 1]); // Assuming we take only the last PDF file
+    } else if (pdfs.length > 1) {
+      setFolderFiles(pdfs); // Add multiple PDF files
     }
-  }, [folderFiles]);
+    if (files.length > 0) {
+      setFolderFiles(files); // Add non-PDF files (like images)
+    }
+  };
+
+  // React Dropzone hook
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: handleDrop,
+    accept: ".pdf", // Allow PDFs and images
+    multiple: true,
+    webkitdirectory: true,
+  });
 
   return (
     <div className="main-content">
       <div className="container-fluid-fileup mt-5">
         <div className="row justify-content-center">
-          <div className="col-12 col-md-6 p-4 bg-light rounded shadow">
+          <div className="the-box col-12 col-md-6 p-4 rounded shadow">
             <h1 className="text-center mb-4">PII Detection PDF Uploader</h1>
-            <form
-              onSubmit={handleSubmit}
-              encType="multipart/form-data"
-              className="d-flex flex-column gap-3"
-            >
-              <input
-                type="file"
-                name="pdf"
-                accept="application/pdf"
-                required
-                onChange={handleFileChange}
-                className="form-control"
-              />
-              <input
-                type="file"
-                name="folder"
-                webkitdirectory="true"
-                multiple
-                onChange={handleFolderChange}
-                className="form-control"
-              />
+            <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
+              <div {...getRootProps()} className="dropzone">
+                <i className="fa-solid fa-cloud-arrow-down fa-3x"></i>
+                <input {...getInputProps()} />
+                <p>Drag and Drop files&folders</p>
+              </div>
               <button type="submit" className="btn btn-primary">
                 Upload PDF
               </button>
