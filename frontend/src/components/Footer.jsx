@@ -8,35 +8,35 @@ const Footer = () => {
         <div className="container p-4">
           <section className="mb-4">
             <a
-              href="https://www.youtube.com/"
+              href="https://www.facebook.com/"
               className="btn btn-outline-light btn-floating m-1"
               role="button"
             >
               <i className="fab fa-facebook-f"></i>
             </a>
             <a
-              href="#"
+              href="https://x.com/"
               className="btn btn-outline-light btn-floating m-1"
               role="button"
             >
               <i className="fab fa-twitter"></i>
             </a>
             <a
-              href="#"
+              href="https://www.google.com/"
               className="btn btn-outline-light btn-floating m-1"
               role="button"
             >
               <i className="fab fa-google"></i>
             </a>
             <a
-              href="#"
+              href="https://www.instagram.com/"
               className="btn btn-outline-light btn-floating m-1"
               role="button"
             >
               <i className="fab fa-instagram"></i>
             </a>
             <a
-              href="#"
+              href="https://www.linkedin.com/feed/"
               className="btn btn-outline-light btn-floating m-1"
               role="button"
             >
