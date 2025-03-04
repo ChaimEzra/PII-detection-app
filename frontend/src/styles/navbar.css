@@ -1,0 +1,45 @@
+.navbar {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  background-color: rgb(95, 94, 92);
+}
+.navbar-toggler-icon {
+  filter: invert(100%);
+}
+.navbar-toggler {
+  order: 2;
+}
+
+.container-fluid {
+  padding-top: 0;
+}
+button {
+  background-color: rgb(95, 94, 92);
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+/* @media (max-width: 768px) {
+  button {
+    justify-items: flex-end;
+  }
+} */
+
+.btn-login {
+  order: 1;
+  margin-right: 10px;
+  width: auto;
+  min-width: 10px;
+  padding: 7px 16px;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.navbar-buttons {
+  display: flex;
+  align-items: center;
+}
