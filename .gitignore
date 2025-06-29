@@ -1,0 +1,37 @@
+# === Python virtual environments ===
+backend/venv/
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# === Python environment files ===
+.env
+*.env
+
+# === Node.js frontend ===
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# === OS-specific ===
+.DS_Store
+Thumbs.db
+
+# === Editor/IDE ===
+.vscode/
+.idea/
+*.swp
+
+# === Logs and temp files ===
+*.log
+*.tmp
+*.bak
+*.orig
+
+# === Coverage / testing ===
+htmlcov/
+.coverage
+.tox/
+.cache/
+pytest_cache/
