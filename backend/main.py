@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import uvicorn
-from .routers import pii_detection, session, login
+from routers import pii_detection, session, login
 
 app = FastAPI(title="PII Detection API")
 
