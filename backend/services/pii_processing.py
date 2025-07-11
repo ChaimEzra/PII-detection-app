@@ -10,6 +10,11 @@ import re
 
 # ------------------ Initialization Functions ------------------
 
+
+# TODO: Add Date of birth recognizer to Presidio. 
+# TODO: Download PyMuPDF for Modifying text at exact coordinates
+
+
 def initialize_hebrew_model():
     #Initialize the Hebrew Hugging Face model
     model_name = "CordwainerSmith/GolemPII-v1"
@@ -37,7 +42,7 @@ def initialize_presidio_with_custom_recognizers():
     )
     analyzer.registry.add_recognizer(PatternRecognizer("ADDRESS", patterns=[address_pattern]))
 
-# Hebrew street names transliterated to English letters
+    # Hebrew street names transliterated to English letters
     address_pattern_he_en = Pattern(
         "HebrewAddressEnglish",
         r"(Rechov|Derech|Kikar|Semta|Shderot|Pina)\s[\w\s'\-]+",
@@ -48,21 +53,51 @@ def initialize_presidio_with_custom_recognizers():
     # Phone pattern (English & Israeli style)
     phone_pattern = Pattern(
         "PhonePattern",
-        r"(\+972-?|0)([23489]{1}\-?\d{7}|[567]{1}\-?\d{7})",
+        r"(?<!\d)(?:\+?\d{1,3}[-.\s]?)?\(?\d{2,4}\)?[-.\s]?\d{3}[-.\s]?\d{4}(?!\d)",
         0.9
     )
-    analyzer.registry.add_recognizer(PatternRecognizer("PHONE_NUMBER", patterns=[phone_pattern]))
+    phone_recognizer = PatternRecognizer(
+        "PHONE_NUMBER",
+        patterns=[phone_pattern]
+        )
+    analyzer.registry.add_recognizer(phone_recognizer)
+
     # Teudat Zehut pattern (Israeli ID number)
     teudat_zehut_pattern = Pattern(
         "TeudatZehutPattern",
         r"\b0*\d{8,9}\b",  # Matches 8 or 9 digits, with optional leading zeros
-        0.9  # Confidence score, adjust as needed
+        0.9  # Confidence score
     )
     teudat_zehut_recognizer = PatternRecognizer(
         supported_entity="TEUDAT_ZEHUT",
         patterns=[teudat_zehut_pattern]
     )
     analyzer.registry.add_recognizer(teudat_zehut_recognizer)
+
+    # Credit Card pattern
+    credit_card_pattern = Pattern(
+        "creditCardPattern",
+        r"\b(?:\d[ -]*?){13,16}\b",
+        0.9
+    )
+    credit_card_recognizer = PatternRecognizer(
+        supported_entity="CREDIT_CARD",
+        patterns=[credit_card_pattern]
+    )
+    analyzer.registry.add_recognizer(credit_card_recognizer)
+
+    # Passport number pattern
+    passport_pattern = Pattern(
+        "PassportPattern",
+        r"\b[A-Z]{0,2}\d{6,9}\b",  # Example: AB1234567
+        0.85
+    )
+    passport_recognizer = PatternRecognizer(
+        supported_entity="PASSPORT_NUMBER",
+        patterns=[passport_pattern]
+    )
+    analyzer.registry.add_recognizer(passport_recognizer)
+
 
     print("Custom recognizers added to Presidio analyzer.")
     return analyzer
@@ -128,29 +163,32 @@ def detect_pii_in_line(text, line_number, page_number, file_name, classifier_heb
     return results
 
 def extract_text_with_lines_and_pages(pdf_path):
-    #Extract text from a PDF with line and page numbers.
     with pdfplumber.open(pdf_path) as pdf:
         all_lines = []
         for page_number, page in enumerate(pdf.pages, start=1):
-            page_lines = page.extract_text().split("\n") if page.extract_text() else []
+            page_text = page.extract_text()
+            if not page_text:
+                continue
+            page_lines = page_text.split("\n")
+            char_index = 0
             for line_number, line_text in enumerate(page_lines, start=1):
+                start_idx = page_text.find(line_text, char_index)
+                end_idx = start_idx + len(line_text)
+                char_index = end_idx  # move forward for next match
                 all_lines.append({
                     "page_number": page_number,
                     "line_number": line_number,
-                    "text": line_text
+                    "text": line_text,
+                    "start_idx": start_idx,
+                    "end_idx": end_idx
                 })
         return all_lines
-def find_matching_line(sentence_text, lines):
-    sentence = sentence_text.strip()
+
+def find_matching_line(sentence_start, sentence_end, lines):
     for line in lines:
-        line_text = line["text"].strip()
-        if sentence == line_text:
+        if line["start_idx"] <= sentence_start <= line["end_idx"]:
             return line
-    for line in lines:
-        line_text = line["text"].strip()
-        if len(line_text) > 5 and line_text in sentence:
-            return line
-    print(f"[DEBUG] No match found for sentence: '{sentence_text}'")
+    print(f"[DEBUG] No match found for sentence at char {sentence_start}")
     return None
 
 
@@ -175,9 +213,8 @@ def process_pdf(file_path, classifier_hebrew, analyzer_english, spacy_nlp):
                 continue
 
             # Try to map sentence to its original line (for context)
-            matched_line = find_matching_line(sentence_text, lines)
+            matched_line = find_matching_line(sent.start_char, sent.end_char, lines)
             line_number = matched_line["line_number"] if matched_line else -1
-            line_text = matched_line["text"] if matched_line else sentence_text
 
             # Detect PII (reusing your detect_pii_in_line logic)
             pii_results = detect_pii_in_line(
