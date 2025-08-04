@@ -7,7 +7,8 @@ import os
 router = APIRouter()
 
 # relative path.
-UPLOAD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "uploads")
+UPLOAD_DIR = os.path.join(os.path.dirname(
+    os.path.abspath(__file__)), "..", "uploads")
 # initializing the models when the app starts
 classifier_hebrew = initialize_hebrew_model()
 analyzer_english = initialize_presidio_with_custom_recognizers()
