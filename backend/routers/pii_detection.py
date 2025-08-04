@@ -1,6 +1,9 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
-# from services.pii_processing import initialize_hebrew_model, initialize_presidio_with_custom_recognizers, process_pdf
+from fastapi.responses import FileResponse
+from pydantic import BaseModel
+from typing import List
 from services.pii_processing import initialize_hebrew_model, initialize_presidio_with_custom_recognizers, process_pdf, initialize_spacy
+from services.pdf_rewriter import replace_pii_and_generate_pdf
 import shutil
 import os
 
@@ -13,6 +16,21 @@ UPLOAD_DIR = os.path.join(os.path.dirname(
 classifier_hebrew = initialize_hebrew_model()
 analyzer_english = initialize_presidio_with_custom_recognizers()
 spacy_nlp = initialize_spacy()
+
+#Request Model
+class PiiItem(BaseModel):
+    file_name: str
+    page_number: int
+    line_number: int
+    entity: str
+    value: str
+    confidence: float
+    line_text: str
+
+class RewriteRequest(BaseModel):
+    file_name: str
+    pii_result: List[PiiItem]
+
 
 
 @router.get("/")
@@ -51,3 +69,20 @@ async def upload_pdfs(files: list[UploadFile] | UploadFile = File(...)):
                 status_code=500, detail=f"An unexpected error occurred processing {file.filename}: {str(e)}")
 
     return {"pii_detected ": results}
+
+@router.post("/rewrite")
+async def rewrite_pdfs(request: RewriteRequest):
+    input_path = os.path.join(UPLOAD_DIR, request.file_name)
+    output_path = input_path.replace(".pdf", "_rewritten.pdf")
+
+    pii_dicts = []
+    for pii in request.pii_result:
+        pii_dicts.append(pii.model_dump())
+
+    replace_pii_and_generate_pdf(input_path, pii_dicts, output_path)
+
+    return FileResponse(
+        output_path,
+        media_type="application/pdf",
+        filename=os.path.basename(output_path)
+    )
