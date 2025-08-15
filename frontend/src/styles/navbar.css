@@ -3,6 +3,9 @@
   padding-bottom: 0;
   background-color: rgb(95, 94, 92);
 }
+.logout-button:hover {
+  cursor: pointer;
+}
 .navbar-toggler-icon {
   filter: invert(100%);
 }

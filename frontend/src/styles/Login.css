@@ -1,0 +1,108 @@
+/* רקע כללי */
+.auth-container {
+  height: 100vh;
+  background: linear-gradient(to bottom right, #dcdcdc, #f5f5f5);
+  background-image: url("../assets/images/backImage.jpg");
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  direction: rtl;
+  font-family: "Segoe UI", sans-serif;
+  padding: 20px;
+}
+
+/* כותרת */
+.auth-container h2 {
+  font-size: 28px;
+  /* color: #333; */
+  color: #c2c2c2;
+  margin-bottom: 30px;
+}
+
+/* הטופס */
+.auth-container form {
+  background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
+  background-color: #484a4c;
+  /* background-color: #fff; */
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* שדות קלט */
+.auth-container input {
+  padding: 12px 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  /* background-color: #f8f8f8; */
+  background: linear-gradient(145deg, #1b2123, #2b3235);
+  box-shadow: 4px 4px 15px rgba(179, 182, 185, 0.5);
+  font-size: 16px;
+  transition: border 0.3s ease;
+}
+
+.auth-container input:focus {
+  color: #c2c2c2;
+  outline: none;
+  border-color: #999;
+  background-color: #fff;
+  box-shadow: 4px 4px 15px rgba(97, 97, 97, 0.5);
+}
+
+/* כפתור התחברות/הרשמה */
+.auth-container button[type="submit"] {
+  padding: 12px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-container button[type="submit"]:hover {
+  background-color: #222;
+}
+
+/* כפתור החלפה בין Login ו־Signup */
+.auth-container p {
+  margin-top: 20px;
+  font-size: 14px;
+  /* color: #555; */
+  color: #c2c2c2;
+  text-align: center;
+}
+.auth-container p button {
+  padding: 5px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+/* .auth-container p button {
+  background: none;
+  border: none;
+  color: #0d6efd;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  margin-right: 5px;
+} */
+
+.auth-container p button:hover {
+  text-decoration: underline;
+}

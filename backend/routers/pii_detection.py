@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, HTTPException, Form
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import List
@@ -17,7 +17,9 @@ classifier_hebrew = initialize_hebrew_model()
 analyzer_english = initialize_presidio_with_custom_recognizers()
 spacy_nlp = initialize_spacy()
 
-#Request Model
+# Request Model
+
+
 class PiiItem(BaseModel):
     file_name: str
     page_number: int
@@ -27,10 +29,10 @@ class PiiItem(BaseModel):
     confidence: float
     line_text: str
 
+
 class RewriteRequest(BaseModel):
     file_name: str
     pii_result: List[PiiItem]
-
 
 
 @router.get("/")
@@ -38,37 +40,105 @@ async def root():
     return {"message": "PII Detection API Is Running hi from pii_detection.py"}
 
 
-@router.post("/upload")
-async def upload_pdfs(files: list[UploadFile] | UploadFile = File(...)):
+# @router.post("/upload")
+# async def upload_pdfs(files: list[UploadFile] | UploadFile = File(...)):
+#     results = []
+
+#     # if there is 1 file, then we convert it into a list so that the function treats everything uniformly
+#     if not isinstance(files, list):
+#         files = [files]
+
+#     # for every file, we put it to the uploads folder and extract the pii
+#     for file in files:
+#         file_path = os.path.join(UPLOAD_DIR, file.filename)
+#         try:
+#             with open(file_path, "wb") as buffer:
+#                 shutil.copyfileobj(file.file, buffer)
+#             pii_result = process_pdf(
+#                 file_path, classifier_hebrew, analyzer_english, spacy_nlp)
+#             results.append({file.filename: pii_result})
+#         except FileNotFoundError:
+#             raise HTTPException(
+#                 status_code=500, detail=f"Error saving file: {file.filename}. File not found.")
+#         except PermissionError:
+#             raise HTTPException(
+#                 status_code=500, detail=f"Error saving file: {file.filename}. Permission denied.")
+#         except shutil.Error as e:
+#             raise HTTPException(
+#                 status_code=500, detail=f"Error saving file: {file.filename}. {str(e)}")
+#         except Exception as e:
+#             raise HTTPException(
+#                 status_code=500, detail=f"An unexpected error occurred processing {file.filename}: {str(e)}")
+
+#     return {"pii_detected ": results}
+
+
+@router.post("/upload_pdfs")
+async def upload_pdfs(
+    files: list[UploadFile] | UploadFile = File(...),
+    user_id: str = Form(...)  # בעתיד נשלוף מ-Depends
+):
     results = []
 
-    # if there is 1 file, then we convert it into a list so that the function treats everything uniformly
+    # אם קובץ בודד – נעשה ממנו רשימה
     if not isinstance(files, list):
         files = [files]
 
-    # for every file, we put it to the uploads folder and extract the pii
+    # יצירת תיקייה ייחודית למשתמש
+    user_folder = os.path.join(UPLOAD_DIR, user_id)
+    os.makedirs(user_folder, exist_ok=True)
+
     for file in files:
-        file_path = os.path.join(UPLOAD_DIR, file.filename)
+        file_path = os.path.join(user_folder, file.filename)
         try:
             with open(file_path, "wb") as buffer:
                 shutil.copyfileobj(file.file, buffer)
+
+            # עיבוד ה־PDF לזיהוי PII
             pii_result = process_pdf(
-                file_path, classifier_hebrew, analyzer_english, spacy_nlp)
+                file_path, classifier_hebrew, analyzer_english, spacy_nlp
+            )
             results.append({file.filename: pii_result})
+
         except FileNotFoundError:
             raise HTTPException(
-                status_code=500, detail=f"Error saving file: {file.filename}. File not found.")
+                status_code=500,
+                detail=f"Error saving file: {file.filename}. File not found."
+            )
         except PermissionError:
             raise HTTPException(
-                status_code=500, detail=f"Error saving file: {file.filename}. Permission denied.")
+                status_code=500,
+                detail=f"Error saving file: {file.filename}. Permission denied."
+            )
         except shutil.Error as e:
             raise HTTPException(
-                status_code=500, detail=f"Error saving file: {file.filename}. {str(e)}")
+                status_code=500,
+                detail=f"Error saving file: {file.filename}. {str(e)}"
+            )
         except Exception as e:
             raise HTTPException(
-                status_code=500, detail=f"An unexpected error occurred processing {file.filename}: {str(e)}")
+                status_code=500,
+                detail=f"Unexpected error processing {file.filename}: {str(e)}"
+            )
 
-    return {"pii_detected ": results}
+    return {"pii_detected": results}
+
+
+@router.get("/uploads")
+async def read_upload():
+    return {"message": "Uploads directory is accessible"}
+# @router.get("/uploads")
+# async def get_uploaded_files():
+#     try:
+#         files = os.listdir(UPLOAD_DIR)
+#         return {"files": files}
+#     except FileNotFoundError:
+#         raise HTTPException(
+#             status_code=404, detail="Upload directory not found")
+#     except Exception as e:
+#         raise HTTPException(
+#             status_code=500, detail=f"An unexpected error occurred: {str(e)}")
+
 
 @router.post("/rewrite")
 async def rewrite_pdfs(request: RewriteRequest):
