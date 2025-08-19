@@ -12,7 +12,7 @@ app = FastAPI(title="PII Detection API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # תוכל להצר אם אתה רוצה רק את react שלך
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -22,16 +22,6 @@ app.add_middleware(
 app.include_router(pii_detection.router, prefix="/pii")
 app.include_router(session.router, prefix="/session")
 app.include_router(login.router, prefix="/login-page")
-
-
-# def hash_password(password: str) -> str:
-#     salt = bcrypt.gensalt()
-#     hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
-#     return hashed.decode('utf-8')
-
-
-# def verify_password(plain_password: str, hashed_password: str) -> bool:
-#     return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 
 @app.get("/")
@@ -67,7 +57,7 @@ def read_root():
 # def login(user: User):
 #     user_by_email = users_collection.find_one({"email": user.email})
 #     if user_by_email and verify_password(user.password, user_by_email["password"]):
-#         # התחברות הצליחה
+#
 #         return {"message": "Login successful"}
 #     else:
 #         # שגיאה

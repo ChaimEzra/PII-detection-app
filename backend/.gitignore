@@ -12,6 +12,7 @@ __pycache__/
 *.pot
 *.mo
 *.swp
+DBSTRING.txt
 .DS_Store
 .idea/
 .vscode/

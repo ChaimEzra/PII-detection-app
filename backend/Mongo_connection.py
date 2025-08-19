@@ -1,10 +1,4 @@
-# backend/database.py
-# from pymongo import MongoClient
 
-# client = MongoClient(
-#     "mongodb+srv://chimas1357:chaim2525@cluster0.xv05qvc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-# db = client["PII-loginDB"]
-# users_collection = db["PII-loginDB"]
 import certifi
 from pymongo import MongoClient
 
