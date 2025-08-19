@@ -35,3 +35,6 @@ htmlcov/
 .tox/
 .cache/
 pytest_cache/
+
+DBSTRING
+Mongo_connection.py
