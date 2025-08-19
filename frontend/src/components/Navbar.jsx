@@ -39,12 +39,13 @@ function Navbar() {
       // ניקוי ה-localStorage
       localStorage.removeItem("user_id");
       localStorage.removeItem("username");
+      localStorage.removeItem("isUploaded");
       logout();
     } catch (err) {
       console.error(err);
       alert("Error logging out");
     }
-    alert("Logout successful!");
+    // alert("Logout successful!");
     // Call the logout function from AuthContext
     // setUsername("");
     // window.location.reload(); // Reload the page to reflect the changes

@@ -6,9 +6,16 @@ from services.pii_processing import initialize_hebrew_model, initialize_presidio
 from services.pdf_rewriter import replace_pii_and_generate_pdf
 import shutil
 import os
+from fastapi.middleware.cors import CORSMiddleware
 
 router = APIRouter()
-
+# router.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],  # תוכל להצר אם אתה רוצה רק את react שלך
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 # relative path.
 UPLOAD_DIR = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), "..", "uploads")
@@ -31,6 +38,7 @@ class PiiItem(BaseModel):
 
 
 class RewriteRequest(BaseModel):
+    user_id: str
     file_name: str
     pii_result: List[PiiItem]
 
@@ -76,7 +84,7 @@ async def root():
 @router.post("/upload_pdfs")
 async def upload_pdfs(
     files: list[UploadFile] | UploadFile = File(...),
-    user_id: str = Form(...)  # בעתיד נשלוף מ-Depends
+    user_id: str = Form(...)
 ):
     results = []
 
@@ -142,7 +150,10 @@ async def read_upload():
 
 @router.post("/rewrite")
 async def rewrite_pdfs(request: RewriteRequest):
-    input_path = os.path.join(UPLOAD_DIR, request.file_name)
+    print("Received request to rewrite PDF", request.file_name)
+    print("PII results:", request.pii_result)
+
+    input_path = os.path.join(UPLOAD_DIR, request.user_id, request.file_name)
     output_path = input_path.replace(".pdf", "_rewritten.pdf")
 
     pii_dicts = []
